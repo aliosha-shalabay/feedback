@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::group(['middleware' => ['auth', 'role:manager']], function() {
+    Route::get('/list', [App\Http\Controllers\Admin\ManagerController::class, 'index'])->name('manager.list');
+});
