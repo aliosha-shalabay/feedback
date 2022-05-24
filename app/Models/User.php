@@ -62,4 +62,12 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function fedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
 }

@@ -38,6 +38,11 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     * @param $request
+     * @param $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
     protected function authenticated($request, $user)
     {
         if ($user->hasRole('manager')) {
