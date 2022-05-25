@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Event\FeedbackCreated;
 use App\Models\Feedback;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -55,12 +56,14 @@ class FeedbackController extends Controller
             $path = $request->file->store('uploads', 'public');
         }
 
-        Feedback::create([
+        $feedback = Feedback::create([
             'theme' => $request->theme,
             'message' => $request->message,
             'file' => $path ?? null,
             'user_id' => auth()->id(),
         ]);
+
+        event (new FeedbackCreated($feedback));
 
         return back()->with('success', __('Created'));
     }
