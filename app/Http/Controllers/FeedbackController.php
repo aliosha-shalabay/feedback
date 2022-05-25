@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Feedback;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -34,6 +35,12 @@ class FeedbackController extends Controller
      */
     public function save(Request $request)
     {
+        $lastFeedback = auth()->user()->fedbacks()->orderBy('created_at', 'desc')->first();
+
+        if ($lastFeedback && $lastFeedback->created_at->addHours(24) > Carbon::now()){
+            return back()->with('info', __('Submit a request within 24 hours'));
+        }
+
         $validator = Validator::make($request->all(), [
             'theme' => 'required|string|min:3|max:255',
             'message' => 'required|string|min:3|max:1000',

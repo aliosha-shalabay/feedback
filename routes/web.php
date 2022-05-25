@@ -15,8 +15,11 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\FeedbackController::class, 'index'])->name('feedback.form');
-Route::post('/save', [App\Http\Controllers\FeedbackController::class, 'save'])->name('feedback.save');
+
+Route::group(['middleware' => ['auth', 'role:client']], function() {
+    Route::get('/', [App\Http\Controllers\FeedbackController::class, 'index'])->name('feedback.form');
+    Route::post('/save', [App\Http\Controllers\FeedbackController::class, 'save'])->name('feedback.save');
+});
 
 Route::group(['middleware' => ['auth', 'role:manager']], function() {
     Route::get('/list', [App\Http\Controllers\Admin\ManagerController::class, 'index'])->name('manager.list');
